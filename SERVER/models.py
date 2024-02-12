@@ -16,12 +16,19 @@ metadata = MetaData(naming_convention=convention)
 
 db = SQLAlchemy(metadata=metadata)
 
+class Ingredient(db.Model, SerializerMixin):
+    __tablename__ = 'ingredients'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    ingredients = db.Column()
+    ingredients = db.relationship('Ingredient', back_populates='recipe')
+###SERIALIZE RULES?
     def __repr__(self):
         return f'<Recipe {self.id} {self.name}>'
 
@@ -30,5 +37,6 @@ class Author(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     recipes = db.relationship('Recipe', back_populates='author')
+
     def __repr__(self):
         return f'<Author {self.id} {self.name}>'
