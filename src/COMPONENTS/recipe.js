@@ -3,7 +3,7 @@ function Recipe({recipe}) {
 
     return (
         <div>
-            <p>{recipe}</p>
+            <p>{recipe.name}</p>
         </div>
     )
 }

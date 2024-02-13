@@ -18,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "/recipes",
         element: <RecipePage />
+      },
+      {
+        path: "/users/:id",
+        element: <RecipePage />
       }
     ]
   } 
