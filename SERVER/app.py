@@ -1,4 +1,4 @@
-from models import db, Food, Author
+from models import db, Recipe, User, Ingredient
 from flask_restful import Api, Resource
 from flask_migrate import Migrate
 from flask import Flask, make_response, jsonify, request
@@ -74,10 +74,11 @@ def all_recipes():
         db.session.commit()
 
         return new_recipe.to_dict(), 201
+    
 
 
 
-@app.route('/recipes/<int:id>', methods = ['GET', 'PATCH'])
+@app.route('/recipes/<int:id>', methods = ['GET', 'PATCH','DELETE'])
 def recipe_by_id(id):
     recipe = Recipe.query.filter(Recipe.id == id).first()
 
@@ -94,24 +95,57 @@ def recipe_by_id(id):
         db.session.commit()
 
         return recipe.to_dict(),200
+    
+    elif request.method == 'DELETE':
+        recipe = Recipe.query.filter(Recipe.id == id).first()
+        if recipe is None: 
+            return {'error': 'recipe not found'}, 404
+        db.session.delete(recipe)
+        db.session.commit()
+        return {}, 204
 
-@app.route('/authors', methods = ['GET', 'POST'])
-def authors():
-    authors = Author.query.all()
-    return [a.to_dict() for a in authors], 200
-@app.route('/authours/<int:id>', methods == ['GET', 'PATCH'])
-def authors_by_id(id): 
-    author = Author.query.filter(Author.id == id).first()
-
-    if author is None:
-        return {'error': 'author not found'}, 404
+@app.route('/users', methods = ['GET', 'POST'])
+def users():
     if request.method == 'GET':
-        return author.to_dict(),200
+        authors = User.query.all()
+        return [u.to_dict() for u in users], 200
+    elif request.method == 'POST': 
+        json_data = request.get_json()
+
+        new_user = User(
+            username = json_data.get('username'),
+            password = json_data.get('password'),
+            recipes = json_data.get('recipes')
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        return new_user.to_dict(), 201
+
+@app.route('/users/<int:id>', methods == ['GET', 'PATCH', 'DELETE'])
+def users_by_id(id): 
+    user = User.query.filter(User.id == id).first()
+
+    if user is None:
+        return {'error': 'user not found'}, 404
+    if request.method == 'GET':
+        return user.to_dict(),200
     elif request.method == 'PATCH':
         json_data = request.get_json()
         for field in json_data:
-            setattr(author, field, json_data[field])
-        db.session.add(author)
+            setattr(user, field, json_data[field])
+        db.session.add(user)
         db.session.commit()
         
-        return author.to_dict(),200
+        return user.to_dict(),200
+    elif request.method == 'DELETE':
+        user = User.query.filter(User.id == id).first()
+
+        if user is None: 
+            return {'error': 'user not found'}, 404
+        
+        db.session.delete(user)
+        db.session.commit()
+        return {}, 204
+
