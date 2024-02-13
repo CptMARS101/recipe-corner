@@ -68,7 +68,7 @@ def all_recipes():
         new_recipe = Recipe(
             name = json_data.get('name'), 
             ingredients = json_data.get('ingredients'),
-            img = json_data.get('image')
+            user = json_data.get('user')
         )
         db.session.add(new_recipe)
         db.session.commit()
