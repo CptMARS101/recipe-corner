@@ -26,7 +26,7 @@ def home():
 def all_ingredients():
     if request.method == 'GET':
         ingredients = ingredients.query.all()
-        return [i.to_dict(rules = ['-users']) for i in ingredients],200
+        return [i.to_dict(rules = ['-recipes']) for i in ingredients],200
     elif request.method == 'POST':
         json_data = request.get_json()
 
@@ -35,7 +35,7 @@ def all_ingredients():
         )
         db.session.add(new_ingredient)
         db.session.commit()
-        return new_ingredient.to_dict(rules = ['-users']),201
+        return new_ingredient.to_dict(rules = ['-recipes']),201
 
 @app.route('/ingredients/<int:id>', methods = ['GET', 'PATCH'])
 def ingredients_by_id(id):
@@ -53,14 +53,14 @@ def ingredients_by_id(id):
             setattr(ingredient, field, json_data[field])
         db.session.add(ingredient)
         db.session.commit()
-        return ingredient.to_dict(rules = ['-users']),200
+        return ingredient.to_dict(rules = ['-recipes']),200
 
 
 @app.route('/recipes', methods = ['GET', 'POST'])
 def all_recipes():
     if request.method == 'GET':
         recipes = recipes.query.all()
-        return [r.to_dict(rules = ['-users']) for r in recipes], 200
+        return [r.to_dict(rules = ['-recipes']) for r in recipes], 200
 
     elif request.method == 'POST':
         json_data = request.get_json()
