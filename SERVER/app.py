@@ -3,6 +3,7 @@ from flask_restful import Api, Resource
 from flask_migrate import Migrate
 from flask import Flask, make_response, jsonify, request
 import os
+from models import db, Recipe, User
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get(
@@ -21,7 +22,7 @@ db.init_app(app)
 @app.route('/')
 def home():
     return ''
-
+###Might not need ingredients
 @app.route('/ingredients', methods = ['GET', 'POST'])
 def all_ingredients():
     if request.method == 'GET':
