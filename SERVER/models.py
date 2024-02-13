@@ -28,23 +28,22 @@ class Recipe(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     ingredients = db.relationship('Ingredient', back_populates='recipe')
-    author_id = db.Column(db.Integer, db.ForeignKey('authors.id'))
-    author = db.relationship('Author', back_populates='recipes')
-###SERIALIZE_RULES??
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', back_populates='recipes')
     def __repr__(self):
         return f'<Recipe {self.id} {self.name}>'
 
-class Author(db.Model, SerializerMixin):
-    __tablename__ = 'authors'
+class User(db.Model, SerializerMixin):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String)
+    username = db.Column(db.String, unique=True)
     password = db.Column(db.String)
-    recipes = db.relationship('Recipe', back_populates='author')
-    
+    recipes = db.relationship('Recipe', back_populates='user')
+
     @validates('password')
     def val_pword(self, key, new_pw):
         if len(new_pw) < 7:
             raise ValueError('Password must be more than 7 characters')
 
     def __repr__(self):
-        return f'<Author {self.id} {self.name}>'
+        return f'<User {self.id} {self.name}>'
