@@ -6,13 +6,18 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RecipeForm from './COMPONENTS/recipeForm';
 import RecipePage from './COMPONENTS/recipePage';
-import UserPage from './COMPONENTS/UserPage';
-import UserDetails from './COMPONENTS/userDetails';
+import Home from './COMPONENTS/home';
+import LoginForm from './COMPONENTS/loginForm';
+import Logout from './COMPONENTS/logout';
 
 const router = createBrowserRouter([
   { path: "/",
     element: <App />,
     children: [
+      {
+        path: "/",
+        element: <Home />
+      },
       {
         path: "/form",
         element: <RecipeForm />
@@ -22,14 +27,12 @@ const router = createBrowserRouter([
         element: <RecipePage />
       },
       {
-        path: "/users",
-        element: <UserPage />,
-        children: [
-          {
-            path: "/users/:id",
-            element: <UserDetails />
-          }
-        ]
+        path: "/login",
+        element: <LoginForm />
+      },
+      {
+        path: "/logout",
+        element: <Logout />
       }
     ]
   } 

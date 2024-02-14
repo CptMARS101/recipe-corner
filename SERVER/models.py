@@ -30,6 +30,7 @@ class Recipe(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
+    img = db.Column(db.String)
     ingredients = db.relationship('Ingredient', back_populates='recipe')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='recipes')

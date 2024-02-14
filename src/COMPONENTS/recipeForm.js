@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
+//NEED TO FETCH to /check_session before loading form
 function RecipeForm(){
     const [name, setName] = useState("")
     const [image, setImage] = useState("")
