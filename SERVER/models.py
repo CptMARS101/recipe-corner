@@ -20,8 +20,11 @@ class Ingredient(db.Model, SerializerMixin):
     __tablename__ = 'ingredients'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, unique=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
+    recipe = db.relationship('Recipe', back_populates='ingredients')
 
+    serialize_rules=['-recipe.ingredients']
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
 
@@ -30,6 +33,8 @@ class Recipe(db.Model, SerializerMixin):
     ingredients = db.relationship('Ingredient', back_populates='recipe')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='recipes')
+
+    serialize_rules=['-ingredients.recipe', '-user.recipes']
     def __repr__(self):
         return f'<Recipe {self.id} {self.name}>'
 
@@ -40,6 +45,7 @@ class User(db.Model, SerializerMixin):
     password = db.Column(db.String)
     recipes = db.relationship('Recipe', back_populates='user')
 
+    serialize_rules=['-recipes.user']
     @validates('password')
     def val_pword(self, key, new_pw):
         if len(new_pw) < 7:
