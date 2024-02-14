@@ -1,4 +1,4 @@
-from models import db, Recipe, User, Ingredient
+from models import db, Ingredient, Recipe, User
 from flask_restful import Api, Resource
 from flask_migrate import Migrate
 from flask import Flask, make_response, jsonify, request
