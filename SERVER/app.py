@@ -22,7 +22,7 @@ db.init_app(app)
 @app.route('/')
 def home():
     return ''
-###Might not need ingredients
+
 @app.route('/ingredients', methods = ['GET', 'POST'])
 def all_ingredients():
     if request.method == 'GET':
