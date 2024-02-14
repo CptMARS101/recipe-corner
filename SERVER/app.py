@@ -56,6 +56,7 @@ def ingredients_by_id(id):
         return ingredient.to_dict(rules = ['-recipes']),200
 
 
+
 @app.route('/recipes', methods = ['GET', 'POST'])
 def all_recipes():
     if request.method == 'GET':
@@ -68,7 +69,9 @@ def all_recipes():
         new_recipe = Recipe(
             name = json_data.get('name'), 
             ingredients = json_data.get('ingredients'),
-            user = json_data.get('user')
+
+            img = json_data.get('img')
+
         )
         db.session.add(new_recipe)
         db.session.commit()
