@@ -3,6 +3,8 @@ from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy_serializer import SerializerMixin
+from flask_bcrypt import Bcrypt
+from sqlalchemy.ext.hybrid import hybrid_property
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -15,31 +17,53 @@ convention = {
 metadata = MetaData(naming_convention=convention)
 
 db = SQLAlchemy(metadata=metadata)
+bcrypt = Bcrypt()
 
 class Ingredient(db.Model, SerializerMixin):
     __tablename__ = 'ingredients'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, unique=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
+    recipe = db.relationship('Recipe', back_populates='ingredients')
+
+    serialize_rules=['-recipe.ingredients']
 
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
+    img = db.Column(db.String)
     ingredients = db.relationship('Ingredient', back_populates='recipe')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='recipes')
+
+    serialize_rules=['-ingredients.recipe', '-user.recipes']
     def __repr__(self):
         return f'<Recipe {self.id} {self.name}>'
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True)
-    password = db.Column(db.String)
+    _password_hash = db.Column(db.String)
     recipes = db.relationship('Recipe', back_populates='user')
 
+    @hybrid_property
+    def password_hash(self):
+        return self._password_hash
+    
+    @password_hash.setter
+    def password_hash(self, new_pw):
+        pass_hash = bcrypt.generate_password_hash(new_pw.encode('utf-8'))
+        self._password_hash = pass_hash.decode('utf-8')
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+
+    serialize_rules=['-recipes.user', '-_password_hash']
     @validates('password')
     def val_pword(self, key, new_pw):
         if len(new_pw) < 7:
