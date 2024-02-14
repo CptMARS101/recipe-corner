@@ -123,7 +123,7 @@ def users():
 
         return new_user.to_dict(), 201
 
-@app.route('/users/<int:id>', methods == ['GET', 'PATCH', 'DELETE'])
+@app.route('/users/<int:id>', methods = ['GET', 'PATCH', 'DELETE'])
 def users_by_id(id): 
     user = User.query.filter(User.id == id).first()
 
