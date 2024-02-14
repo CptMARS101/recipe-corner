@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
 import Recipe from "./recipe";
 
-function UserPage() {
+function UserDetails() {
     useEffect(() => {
-        fetch('http://localhost:3000/users')
+        fetch('http://localhost:3000/users/:id')
         .then(res => res.json())
         .then(data => userData)
     })
@@ -18,4 +18,4 @@ function UserPage() {
     )
 }
 
-export default UserPage;
+export default UserDetails;
