@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RecipeForm from './COMPONENTS/recipeForm';
 import RecipePage from './COMPONENTS/recipePage';
+import UserPage from './COMPONENTS/UserPage';
+import UserDetails from './COMPONENTS/userDetails';
 
 const router = createBrowserRouter([
   { path: "/",
@@ -20,8 +22,14 @@ const router = createBrowserRouter([
         element: <RecipePage />
       },
       {
-        path: "/users/:id",
-        element: <RecipePage />
+        path: "/users",
+        element: <UserPage />,
+        children: [
+          {
+            path: "/users/:id",
+            element: <UserDetails />
+          }
+        ]
       }
     ]
   } 
