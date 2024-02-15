@@ -6,7 +6,9 @@ function FeaturedRecipe({featFood, setFoodList, list}){
     function handleDelete() {
         const updateFood = list.filter(f => f.id != featFood.id)
         setFoodList(updateFood)
+
         fetch(`http://127.0.0.1:5000/${featFood.id}`, {
+
             method: 'DELETE'
         })
     }

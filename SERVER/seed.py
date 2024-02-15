@@ -8,7 +8,6 @@ if __name__ == '__main__':
         print("Clearing db...")
         User.query.delete()
         Recipe.query.delete()
-
         print("Seeding recipes...")
         recipes = [
             Recipe(name="Lasagna", image="https://www.modernhoney.com/wp-content/uploads/2019/08/Classic-Lasagna-12-scaled.jpg", ingredients=[
@@ -92,7 +91,6 @@ if __name__ == '__main__':
             User(username="Janet Van Dyne", _password_hash ="The Wasp"),
             User(username = "Guy Fieri", _password_hash = "Flavortown"),
             User(username = "Chef Boyardee", _password_hash = "CanofCrap"),
-
         ]
 
         db.session.add_all(users)

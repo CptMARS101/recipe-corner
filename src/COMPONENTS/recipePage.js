@@ -8,7 +8,9 @@ function RecipePage() {
     const [search, setSearch] = useState("")
     const [featFood, setFeatFood] = useState({})
     useEffect(() => {
+
         fetch('http://127.0.0.1:5000//recipes')
+
         .then(res => res.json())
         .then(data => {console.log(data); return setFoodList(data)})
     }, [])
