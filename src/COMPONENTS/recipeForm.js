@@ -20,7 +20,9 @@ function RecipeForm(){
             ingredients: e.target.ingredients.value.split('//'),
             steps: e.target.steps.value.split('//')
         }
-        fetch('/recipes', {
+
+        fetch('http://127.0.0.1:5000/recipes', {
+
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',

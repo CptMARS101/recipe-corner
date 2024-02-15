@@ -12,7 +12,9 @@ function LoginForm() {
             'username': e.target.username.value,
             'password': e.target.password.value
         }
-        fetch('/login', {
+
+        fetch('http://127.0.0.1:5000/login', {
+
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -40,6 +42,7 @@ function LoginForm() {
                 <label>Username: </label>
                 <input type='text' name='username' />
                 <br />
+                <label>Password: </label>
                 <input type="password" name="password" />
                 <br />
                 <input type="submit" />
