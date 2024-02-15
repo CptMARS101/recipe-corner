@@ -9,6 +9,7 @@ import RecipePage from './COMPONENTS/recipePage';
 import Home from './COMPONENTS/home';
 import LoginForm from './COMPONENTS/loginForm';
 import Logout from './COMPONENTS/logout';
+import Signup from './COMPONENTS/signup';
 
 const router = createBrowserRouter([
   { path: "/",
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginForm />
+      },
+      {
+        path: "/signup",
+        element: <Signup />
       },
       {
         path: "/logout",

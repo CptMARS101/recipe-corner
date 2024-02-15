@@ -6,7 +6,7 @@ function Logout(){
     const [loggedOut, setLoggedOut] = useState()
 
     useEffect(() => {
-        fetch('http://127.0.0.1:5555/users', {
+        fetch('/logout', {
             method: 'DELETE'
         })
         .then(res => {

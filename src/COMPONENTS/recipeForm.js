@@ -18,7 +18,7 @@ function RecipeForm(){
             ingredients: e.target.ingredients.value.split('//'),
             steps: e.target.steps.value.split('//')
         }
-        fetch('http://127.0.0.1:5555/recipes', {
+        fetch('/recipes', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -35,7 +35,7 @@ function RecipeForm(){
         <div>
             <form className="form" onSubmit={handleForm}>
                 <h3>Add Your OWN Recipe!!</h3>
-                <p>Create a line break for ingredients & recipe steps with "//" at the end of each line</p>
+                <p>Separate ingredients & recipe steps with "//" at the end of each line</p>
                 <input 
                 type="text" 
                 name="name" 
