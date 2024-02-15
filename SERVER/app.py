@@ -33,12 +33,18 @@ def all_recipes():
 
     elif request.method == 'POST':
         json_data = request.get_json()
+        ######Getting signed in user
+        user_session_id = session.get('user_id')
+        user_session = User.query.filter(User.id == user_session_id).first()
 
         new_recipe = Recipe(
             name = json_data.get('name'), 
             ingredients = json_data.get('ingredients'),
 
-            img = json_data.get('img')
+            image = json_data.get('image'),
+            user_id = user_session_id,
+            user = user_session
+
 
         )
         db.session.add(new_recipe)
