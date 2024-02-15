@@ -3,6 +3,7 @@ from flask_restful import Api, Resource
 from flask_migrate import Migrate
 from flask import Flask, make_response, jsonify, request
 import os
+from flask_cors import CORS
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get(
@@ -12,15 +13,45 @@ DATABASE = os.environ.get(
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = os.environ.get('SECRET_KEY')
 app.json.compact = False
 
-migrate = Migrate(app, db)
-
 db.init_app(app)
+migrate = Migrate(app, db)
+CORS(app, supports_credentials=True)
+
 
 @app.route('/')
 def home():
     return ''
+
+@app.route('/login', methods = ['POST'])
+def login():
+    json_data = request.get_json()
+    user = User.query.filter(User.username == json_data.get('username')).first()
+
+    if not user:
+        return {'error': ' user not found'}, 404
+    
+    if not user.authenticate(json_data.get('password')):
+        return {'error': 'invalid password'}, 401
+    
+    session['user_id'] = user.id 
+    return user.to_dict(), 200
+
+@app.route('/logout', methods = ["DELETE"])
+def logout():
+    session.pop('user_id', None)
+    return {}, 204
+
+@app.route('/check_session')
+def check_session():
+    user_id = session.get('user_id')
+    user = User.query.filter(User.id == user_id).first()
+
+    if not user:
+        return {'error': 'unauthorized'}, 401
+    return user.to_dict(),200
 
 @app.route('/ingredients', methods = ['GET', 'POST'])
 def all_ingredients():

@@ -1,43 +1,41 @@
-from random import randint, choice as rc 
-
-from faker import faker
-from faker_food import FoodProvider
+from random import choice as rc
 
 from app import app
+from models import db, Recipe, User
 
-from models import db, Ingredient, Recipe, User
+if __name__ == '__main__':
+    with app.app_context():
+        print("Clearing db...")
+        User.query.delete()
+        Recipe.query.delete()
+########ADD SOME RECIPES
+        print("Seeding recipes...")
+        recipes = [
+            Recipe(name="", image="", ingredients=[], steps=[]),
+            Recipe(name="", image="", ingredients=[], steps=[]),
+            Recipe(name="", image="", ingredients=[], steps=[]),
+            Recipe(name="", image="", ingredients=[], steps=[])
+        ]
 
-fake = Faker()
+        db.session.add_all(recipes)
+########ADD SOME USERS AND PWORDS
+        print("Seeding users...")
+        users = [
+            User(name="Kamala Khan", password="Ms. Marvel"),
+            User(name="Doreen Green", password="Squirrel Girl"),
+            User(name="Gwen Stacy", password="Spider-Gwen"),
+            User(name="Janet Van Dyne", password="The Wasp")
+        ]
 
-def create_ingredients():
-    ingredients = []
-    for _ in range(20):
-        i = Ingredient(
-            name = fake.ingredient(), 
-        )
-        ingredients.append(i)
-
-    return ingredients
-
-def create_recipes():
-    recipes = []
-    for _ in range(10):
-        r = Recipe(
-            name = fake.dish(),
-            ingredients = fake.ingredient(),
-            user_id = rc([user.id for user in users]),
-            user = fake.name()
-
-        )
-        recipes.append(r)
-    return recipes
-
-def create_users():
-    users = []
-    for _ in range (20):
-        u = User(
-            username = fake.username(),
-            password = fake.password(), 
-            recipes = 
-
-        )
+        db.session.add_all(users)
+#######FIX THIS PART###########
+        print("Adding recipes to users...")
+        for user in users:
+            recipe = rc(recipes)
+            user.recipes.append(
+                recipe
+            )
+        db.session.add_all(recipes)
+        db.session.commit()
+#####################################
+        print("Done seeding!")

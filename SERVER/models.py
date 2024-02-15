@@ -19,27 +19,18 @@ metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 bcrypt = Bcrypt()
 
-class Ingredient(db.Model, SerializerMixin):
-    __tablename__ = 'ingredients'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
-    recipe = db.relationship('Recipe', back_populates='ingredients')
-
-    serialize_rules=['-recipe.ingredients']
-
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    img = db.Column(db.String)
-    ingredients = db.relationship('Ingredient', back_populates='recipe')
+    image = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='recipes')
+    ingredients = db.Column(db.JSON)
+    steps = db.Column(db.JSON)
 
-    serialize_rules=['-ingredients.recipe', '-user.recipes']
+    serialize_rules=['-user.recipes']
     def __repr__(self):
         return f'<Recipe {self.id} {self.name}>'
 
