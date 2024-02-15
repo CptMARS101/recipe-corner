@@ -7,8 +7,8 @@ function RecipeSearch({setSearch}){
     }
     return (
         <div className="search-bar">
-            <label htmlFor="search">Search Recipes:</label>
-            <input
+            <label className = 'search_label' htmlFor="search">Search Recipes:</label>
+            <input classname = "search_input"
                 type="text"
                 name="search-in"
                 placeholder="Recipe Name"
