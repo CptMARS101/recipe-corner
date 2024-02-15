@@ -18,7 +18,7 @@ function Signup() {
         if (data.password === data.password2) {
             setUsername(data.username)
             setPassword(data.password)
-            fetch('/signup', {
+            fetch('http://127.0.0.1:5000/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
