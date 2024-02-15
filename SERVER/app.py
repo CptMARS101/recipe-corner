@@ -1,4 +1,4 @@
-from models import db, Recipe, User, Ingredient
+from models import db, Ingredient, Recipe, User
 from flask_restful import Api, Resource
 from flask_migrate import Migrate
 from flask import Flask, make_response, jsonify, request, session
@@ -40,9 +40,12 @@ def all_recipes():
         new_recipe = Recipe(
             name = json_data.get('name'), 
             ingredients = json_data.get('ingredients'),
+
             image = json_data.get('image'),
             user_id = user_session_id,
             user = user_session
+
+
         )
         db.session.add(new_recipe)
         db.session.commit()
