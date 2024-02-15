@@ -1,4 +1,4 @@
-from models import db, Ingredient, Recipe, User
+from models import db, Recipe, User
 from flask_restful import Api, Resource
 from flask_migrate import Migrate
 from flask import Flask, make_response, jsonify, request, session
@@ -28,7 +28,7 @@ def home():
 @app.route('/recipes', methods = ['GET', 'POST'])
 def all_recipes():
     if request.method == 'GET':
-        recipes = recipes.query.all()
+        recipes = Recipe.query.all()
         return [r.to_dict(rules = ['-recipes']) for r in recipes], 200
 
     elif request.method == 'POST':
@@ -71,7 +71,7 @@ def recipe_by_id(id):
         return recipe.to_dict(),200
     
     elif request.method == 'DELETE':
-        recipe = Recipe.query.filter(Recipe.id == id).first()
+        
         if recipe is None: 
             return {'error': 'recipe not found'}, 404
         db.session.delete(recipe)
@@ -110,30 +110,3 @@ def check_session():
     if not user:
         return {'error': 'unauth'}, 401
     return user.to_dict(), 200    
-
- #   @app.route('/users/<int:id>', methods = ['GET', 'PATCH', 'DELETE'])
- #   def users_by_id(id): 
- #       user = User.query.filter(User.id == id).first()
-
- #       if user is None:
- #           return {'error': 'user not found'}, 404
- #      if request.method == 'GET':
- #           return user.to_dict(),200
- #       elif request.method == 'PATCH':
- #           json_data = request.get_json()
- #           for field in json_data:
- #               setattr(user, field, json_data[field])
- #           db.session.add(user)
- #           db.session.commit()
-            
- #           return user.to_dict(),200
- #       elif request.method == 'DELETE':
- #           user = User.query.filter(User.id == id).first()
-
- #           if user is None: 
- #               return {'error': 'user not found'}, 404
-            
- #           db.session.delete(user)
- #           db.session.commit()
- #           return {}, 204
-
