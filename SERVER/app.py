@@ -22,41 +22,6 @@ db.init_app(app)
 def home():
     return ''
 
-@app.route('/ingredients', methods = ['GET', 'POST'])
-def all_ingredients():
-    if request.method == 'GET':
-        ingredients = ingredients.query.all()
-        return [i.to_dict(rules = ['-recipes']) for i in ingredients],200
-    elif request.method == 'POST':
-        json_data = request.get_json()
-
-        new_ingredient = Ingredient(
-            name = json_data.get('name')
-        )
-        db.session.add(new_ingredient)
-        db.session.commit()
-        return new_ingredient.to_dict(rules = ['-recipes']),201
-
-@app.route('/ingredients/<int:id>', methods = ['GET', 'PATCH'])
-def ingredients_by_id(id):
-    ingredient = Ingredient.query.filter(Ingredient.id == id).first()
-
-    if ingredient is None:
-        return {'error': 'ingredient not found'}, 404
-    if request.method == 'GET':
-        return ingredient.to_dict(), 200
-        print 
-    elif request.method == 'PATCH': 
-        json_data = request.get_json()
-
-        for field in json_data:
-            setattr(ingredient, field, json_data[field])
-        db.session.add(ingredient)
-        db.session.commit()
-        return ingredient.to_dict(rules = ['-recipes']),200
-
-
-
 @app.route('/recipes', methods = ['GET', 'POST'])
 def all_recipes():
     if request.method == 'GET':
@@ -76,9 +41,6 @@ def all_recipes():
 
         return new_recipe.to_dict(), 201
     
-
-
-
 @app.route('/recipes/<int:id>', methods = ['GET', 'PATCH','DELETE'])
 def recipe_by_id(id):
     recipe = Recipe.query.filter(Recipe.id == id).first()
@@ -87,7 +49,7 @@ def recipe_by_id(id):
         return {'error': 'recipe not found'}, 404
     
     if request.method == 'GET':
-        return ingredient.to_dict(),200
+        return recipe.to_dict(),200
     elif request.method == 'PATCH':
         json_data = request.get_json()
         for field in json_data:
@@ -108,7 +70,7 @@ def recipe_by_id(id):
 @app.route('/users', methods = ['GET', 'POST'])
 def users():
     if request.method == 'GET':
-        authors = User.query.all()
+        users = User.query.all()
         return [u.to_dict() for u in users], 200
     elif request.method == 'POST': 
         json_data = request.get_json()
@@ -124,7 +86,7 @@ def users():
 
         return new_user.to_dict(), 201
 
-@app.route('/users/<int:id>', methods == ['GET', 'PATCH', 'DELETE'])
+@app.route('/users/<int:id>', methods = ['GET', 'PATCH', 'DELETE'])
 def users_by_id(id): 
     user = User.query.filter(User.id == id).first()
 

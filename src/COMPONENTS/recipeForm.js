@@ -6,7 +6,7 @@ function RecipeForm(){
     const [name, setName] = useState("")
     const [image, setImage] = useState("")
     const [ingredients, setIngredients] = useState("")
-    const [recipe, setRecipe] = useState("")
+    const [steps, setSteps] = useState("")
     const [foodList, setFoodList] = useState([])
     
     function handleForm(e) {
@@ -16,9 +16,9 @@ function RecipeForm(){
             name: e.target.name.value,
             image: e.target.image.value,
             ingredients: e.target.ingredients.value.split('//'),
-            recipe: e.target.recipe.value.split('//')
+            steps: e.target.steps.value.split('//')
         }
-        fetch('http://localhost:3000/recipes', {
+        fetch('http://127.0.0.1:5555/recipes', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -59,10 +59,10 @@ function RecipeForm(){
                 <br />
                 <input 
                 type="text" 
-                name="recipe" 
-                placeholder="Recipe" 
+                name="steps" 
+                placeholder="Steps" 
                 className="input-text"
-                value={recipe} onChange={e => setRecipe(e.target.value)}/>
+                value={steps} onChange={e => setSteps(e.target.value)}/>
                 <br />
                 <input type="submit"
                 name="submit"
