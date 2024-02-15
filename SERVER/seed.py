@@ -8,23 +8,91 @@ if __name__ == '__main__':
         print("Clearing db...")
         User.query.delete()
         Recipe.query.delete()
-########ADD SOME RECIPES
+
         print("Seeding recipes...")
         recipes = [
-            Recipe(name="", image="", ingredients=[], steps=[]),
-            Recipe(name="", image="", ingredients=[], steps=[]),
-            Recipe(name="", image="", ingredients=[], steps=[]),
-            Recipe(name="", image="", ingredients=[], steps=[])
+            Recipe(name="Lasagna", image="https://www.modernhoney.com/wp-content/uploads/2019/08/Classic-Lasagna-12-scaled.jpg", ingredients=[
+        "1: 12 Lasagna Noodles",
+        "2: 4 Cups Mozzarella Cheese(shredded)",
+        "3: 1/2 Cup Parmesean Cheese(shredded)",
+        "4: 1/2 Pound Ground Beef",
+        "5: 1/2 Pound Sausage",
+        "6: 1 Onion(diced)",
+        "7: 2 Cloves Garlic(minced)",
+        "8: 36oz Pasta Sauce",
+        "9: 2 Tbs Tomato Paste",
+        "10: 1 tsp Italian Seasoning",
+        "11: 2 Cups Ricotta Cheese",
+        "12: 1/4 Cup Parsley(chopped)",
+        "13: 1 Egg(beaten)"], steps=[
+        "step1: Preheat the oven to 350°F. In a large pot of salted water, boil lasagna noodles until al dente according to package directions. Drain, rinse under cold water, and set aside.",
+        "step2: In a large skillet or dutch oven, brown beef, sausage, onion, and garlic over medium-high heat until no pink remains. Drain any fat.",
+        "step3: Stir in the pasta sauce, tomato paste, Italian seasoning, ½ teaspoon of salt, and ¼ teaspoon of black pepper. Simmer uncovered over medium heat for 5 minutes or until thickened.",
+        "step4: In a separate bowl, combine 1 ½ cups mozzarella, ¼ cup parmesan cheese, ricotta, parsley, egg, and ¼ teaspoon salt.",
+        "step5: Spread 1 cup of the meat sauce in a 9 by 13 pan or casserole dish. Top it with 3 lasagna noodles. Layer with ⅓ of the ricotta cheese mixture and 1 cup of meat sauce. Repeat twice more. Finish with 3 noodles topped with remaining sauce.",
+        "step6: Cover with foil and bake for 45 minutes.",
+        "step7: Remove the foil and sprinkle with the remaining 2 ½ cups mozzarella cheese and ¼ cup parmesan cheese. Bake for an additional 15 minutes or until browned and bubbly. Broil for 2-3 minutes if desired.",
+        "step8: Rest for at least 15 minutes before cutting."]),
+            Recipe(name="Chicken Parm", image="https://cafedelites.com/wp-content/uploads/2018/04/Chicken-Parmigiana-IMAGE-2.jpg", ingredients=[  "1: 2 Eggs",
+        "2: 1 Tbs Garlic(minced)",
+        "3: 2 Tbs Parsley(chopped)",
+        "4: 3 Large Chicken Breasts(halved)",
+        "5: 1 1/2 Cups Breadcrumbs",
+        "6: 1 Cup Parmesean(shredded)",
+        "7: 1 Onion(chopped)",
+        "8: 14oz Tomato Puree",
+        "9: 1 tsp Italian Seasoning",
+        "10: 1 tsp Sugar",
+        "11: 8oz Mozzarella(shredded)"], steps=[
+        "step1: Preheat oven 430°F | 220°C. Lightly grease an oven tray (or baking dish) with non stick cooking oil spray; set aside.",
+        "step2: Whisk together eggs, garlic, parsley, salt and pepper in a shallow dish. Add chicken into the egg, rotating to evenly coat each fillet in the mixture. Cover with plastic wrap and allow to marinate for at least 15 minutes (or overnight night if time allows for a deeper flavour).",
+        "step3: When chicken is ready for cooking, mix bread crumbs, Parmesan cheese and garlic powder together in a separate shallow bowl. Dip chicken into the breadcrumb mixture to evenly coat.",
+        "step4: Heat oil in a large skillet over medium-high heat until hot and shimmering. Fry chicken until golden and crispy, (about 4-5 minutes each side).",
+        "step5: Place chicken on prepared baking tray / dish and top each breast with about 1/3 cup of sauce (sauce recipe below). Top each chicken breast with 2-3 slices of mozzarella cheese and about 2 tablespoons parmesan cheese. Sprinkle with basil or parsley.",
+        "step6: Bake for 15-20 minutes, or until cheese is bubbling and melted, and the chicken is completely cooked through.",
+        "step7: Heat oil in a medium-sized pot. Fry onion until transparent (about 3 minutes), then add the garlic until fragrant (about 30 seconds).",
+        "step8: Add the tomato puree, salt and pepper to taste, Italian herbs and sugar (If using). Cover with lid to simmer for about 8 minutes, or until sauce has thickened slightly. Taste test and adjust salt and pepper, if needed."]),
+            Recipe(name="Lemon Blueberry Tart", image="https://sallysbakingaddiction.com/wp-content/uploads/2021/03/lemon-blueberry-tart-2.jpg", ingredients=[
+        "1: (Sauce)1 tsp Cornstarch",
+        "2: (Sauce)2 tsp Lemon Juice",
+        "3: (Sauce)1 Cup fresh blueberries",
+        "4: (Sauce)2 tsp Sugar",
+        "5: (Crust)1/2 Cup Butter(melted)",
+        "6: (Crust)1/4 Cup Sugar",
+        "7: (Crust)1 tsp Vanilla Extract",
+        "8: (Crust)1/4 tsp Salt",
+        "9: (Crust)1 Cup Flour",
+        "10: (Filling)14oz Sweetened Condensed Milk",
+        "11: 6 Tbs Lemon Juice",
+        "12: 1 tsp Lemon Zest",
+        "13: 1 Egg Yolk"], steps=[
+        "step1: (Sauce)Using a fork, mix the cornstarch and lemon juice together in a small bowl until the cornstarch has dissolved. Set aside. Warm the blueberries and sugar together in a small saucepan over medium heat. Stir occasionally for 3 minutes, mashing the blueberries as best you can against the bottom and sides of the pan to help break them up. Stir in the cornstarch mixture. Cook for 2 more minutes as the sauce thickens, stirring and mashing the blueberries to break them up as desired. Remove sauce from heat and set aside at room temperature until step 6. Makes about 1/2 – 2/3 cup blueberry sauce and you’ll use about half for the swirl. (Reserve extra for garnish/serving.)",
+        "step2: Preheat oven to 350°F (177°C)",
+        "step3: (Crust)Mix the melted butter, sugar, vanilla extract, and salt together in a medium bowl. Add the flour and stir to completely combine. The dough will be a little greasy and very thick. Using a rubber spatula or your hands, press dough firmly into a 9-inch tart pan (no need to grease it), making sure the layer of crust is even on the bottom and all around the sides. It may seem like it won’t fit, but it will. You can use the bottom of a measuring cup to pack the crust in too, but sometimes it sticks.",
+        "step4: (Crust)Bake for 15 minutes or until the edges are very lightly browned. Remove from the oven. Using a fork, poke a few holes all over the top of the warm crust (not all the way through the crust). This helps the filling stick.",
+        "step5: (Filling)Whisk all of the filling ingredients together until combined. Pour into warm crust. Stir up the blueberry sauce because it has likely thickened. It can still be warm when you use it in this step. If it’s too thick, warm it in the microwave for 5-10 seconds. Drop spoonfuls of blueberry sauce all over the top, using about half of the sauce. Reserve the rest of the sauce for serving. Using a toothpick or knife, gently swirl the sauce and filling together. Shimmy the pan back and forth 2-3 times to let the sauce and filling settle down into the crust a bit.",
+        "step6: Bake for 17-19 minutes, just until the center of the tart no longer jiggles when you give the pan a light tap. It will still be a little sticky on top. Avoid over-baking because the tart will taste rubbery. (Tip: Err on the side of under-baking because the filling also has a chance to set up in the refrigerator. You want a creamy soft filling.)",
+        "step7: Remove tart from the oven and place on a cooling rack. Cool completely at room temperature, then chill in the refrigerator uncovered for at least 2 hours and up to 1 day. If chilling for longer than 2 hours, cover it. After chilling, remove the sides of the tart pan if your pan has removable sides.",
+        "step8: Slice and serve with optional garnishes including any leftover blueberry sauce."]),
+            Recipe(name="Beans anad Rice", image="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2007/12/7/1/IE0213_Red_Beans_and_Rice.jpg.rend.hgtvcom.616.462.suffix/1552488799980.jpeg", ingredients=["beans",
+        "rice",
+        "celery"], steps=[ "prep",
+        "cook",
+        "combine",
+        "enjoy"])
         ]
 
         db.session.add_all(recipes)
-########ADD SOME USERS AND PWORDS
+
         print("Seeding users...")
         users = [
-            User(name="Kamala Khan", password="Ms. Marvel"),
-            User(name="Doreen Green", password="Squirrel Girl"),
-            User(name="Gwen Stacy", password="Spider-Gwen"),
-            User(name="Janet Van Dyne", password="The Wasp")
+            User(username="Kamala Khan", _password_hash="Ms. Marvel"),
+            User(username="Doreen Green", _password_hash="Squirrel Girl"),
+            User(username="Gwen Stacy", _password_hash="Spider-Gwen"),
+            User(username="Janet Van Dyne", _password_hash ="The Wasp"),
+            User(username = "Guy Fieri", _password_hash = "Flavortown"),
+            User(username = "Chef Boyardee", _password_hash = "CanofCrap"),
+
         ]
 
         db.session.add_all(users)

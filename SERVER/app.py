@@ -1,9 +1,9 @@
-from models import db, Ingredient, Recipe, User
+from models import db, Recipe, User
 from flask_restful import Api, Resource
 from flask_migrate import Migrate
-from flask import Flask, make_response, jsonify, request
-import os
+from flask import Flask, make_response, jsonify, request, session
 from flask_cors import CORS
+import os
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get(
@@ -13,95 +13,38 @@ DATABASE = os.environ.get(
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = os.environ.get('SECRET_KEY')
 app.json.compact = False
+app.secret_key = os.environ.get('SECRET_KEY')
 
 db.init_app(app)
+
 migrate = Migrate(app, db)
 CORS(app, supports_credentials=True)
-
 
 @app.route('/')
 def home():
     return ''
 
-@app.route('/login', methods = ['POST'])
-def login():
-    json_data = request.get_json()
-    user = User.query.filter(User.username == json_data.get('username')).first()
-
-    if not user:
-        return {'error': ' user not found'}, 404
-    
-    if not user.authenticate(json_data.get('password')):
-        return {'error': 'invalid password'}, 401
-    
-    session['user_id'] = user.id 
-    return user.to_dict(), 200
-
-@app.route('/logout', methods = ["DELETE"])
-def logout():
-    session.pop('user_id', None)
-    return {}, 204
-
-@app.route('/check_session')
-def check_session():
-    user_id = session.get('user_id')
-    user = User.query.filter(User.id == user_id).first()
-
-    if not user:
-        return {'error': 'unauthorized'}, 401
-    return user.to_dict(),200
-
-@app.route('/ingredients', methods = ['GET', 'POST'])
-def all_ingredients():
-    if request.method == 'GET':
-        ingredients = ingredients.query.all()
-        return [i.to_dict(rules = ['-recipes']) for i in ingredients],200
-    elif request.method == 'POST':
-        json_data = request.get_json()
-
-        new_ingredient = Ingredient(
-            name = json_data.get('name')
-        )
-        db.session.add(new_ingredient)
-        db.session.commit()
-        return new_ingredient.to_dict(rules = ['-recipes']),201
-
-@app.route('/ingredients/<int:id>', methods = ['GET', 'PATCH'])
-def ingredients_by_id(id):
-    ingredient = Ingredient.query.filter(Ingredient.id == id).first()
-
-    if ingredient is None:
-        return {'error': 'ingredient not found'}, 404
-    if request.method == 'GET':
-        return ingredient.to_dict(), 200
-        print 
-    elif request.method == 'PATCH': 
-        json_data = request.get_json()
-
-        for field in json_data:
-            setattr(ingredient, field, json_data[field])
-        db.session.add(ingredient)
-        db.session.commit()
-        return ingredient.to_dict(rules = ['-recipes']),200
-
-
-
 @app.route('/recipes', methods = ['GET', 'POST'])
 def all_recipes():
     if request.method == 'GET':
-        recipes = recipes.query.all()
+        recipes = Recipe.query.all()
         return [r.to_dict(rules = ['-recipes']) for r in recipes], 200
 
     elif request.method == 'POST':
         json_data = request.get_json()
+        ######Getting signed in user
+        user_session_id = session.get('user_id')
+        user_session = User.query.filter(User.id == user_session_id).first()
 
         new_recipe = Recipe(
             name = json_data.get('name'), 
             ingredients = json_data.get('ingredients'),
 
-            img = json_data.get('img')
+            image = json_data.get('image'),
+            user_id = user_session_id,
+            user = user_session
+
 
         )
         db.session.add(new_recipe)
@@ -109,9 +52,6 @@ def all_recipes():
 
         return new_recipe.to_dict(), 201
     
-
-
-
 @app.route('/recipes/<int:id>', methods = ['GET', 'PATCH','DELETE'])
 def recipe_by_id(id):
     recipe = Recipe.query.filter(Recipe.id == id).first()
@@ -120,7 +60,7 @@ def recipe_by_id(id):
         return {'error': 'recipe not found'}, 404
     
     if request.method == 'GET':
-        return ingredient.to_dict(),200
+        return recipe.to_dict(),200
     elif request.method == 'PATCH':
         json_data = request.get_json()
         for field in json_data:
@@ -131,55 +71,43 @@ def recipe_by_id(id):
         return recipe.to_dict(),200
     
     elif request.method == 'DELETE':
-        recipe = Recipe.query.filter(Recipe.id == id).first()
+        
         if recipe is None: 
             return {'error': 'recipe not found'}, 404
         db.session.delete(recipe)
         db.session.commit()
         return {}, 204
 
-@app.route('/users', methods = ['GET', 'POST'])
-def users():
-    if request.method == 'GET':
-        authors = User.query.all()
-        return [u.to_dict() for u in users], 200
-    elif request.method == 'POST': 
-        json_data = request.get_json()
+@app.route('/login', methods = ['POST'])
+def login():
+    json_data = request.get_json()
+    user = User.query.filter(User.username == json_data.get('username')).first()
+    if not user:
+        return {'error': 'no such user'}, 404
+    if not user.authenticate(json_data.get('password')):
+        return {'error': 'wrong password'}
+    session['user_id'] = user.id
+    return user.to_dict(), 200
 
-        new_user = User(
-            username = json_data.get('username'),
-            password = json_data.get('password'),
-            recipes = json_data.get('recipes')
-        )
+@app.route('/signup', methods = ['POST'])
+def signup():
+    json_data = request.get_json()
+    new_user = User(username=json_data.get('username'))
+    new_user.password_hash = json_data.get('password')
+    db.session.add(new_user)
+    db.session.commit()
+    return new_user.to_dict(),201
 
-        db.session.add(new_user)
-        db.session.commit()
+@app.route('/logout', methods = ['DELETE'])
+def logout():
+    session.pop('user_id', None)
+    return {}, 204
 
-        return new_user.to_dict(), 201
-
-@app.route('/users/<int:id>', methods = ['GET', 'PATCH', 'DELETE'])
-def users_by_id(id): 
-    user = User.query.filter(User.id == id).first()
-
-    if user is None:
-        return {'error': 'user not found'}, 404
-    if request.method == 'GET':
-        return user.to_dict(),200
-    elif request.method == 'PATCH':
-        json_data = request.get_json()
-        for field in json_data:
-            setattr(user, field, json_data[field])
-        db.session.add(user)
-        db.session.commit()
-        
-        return user.to_dict(),200
-    elif request.method == 'DELETE':
-        user = User.query.filter(User.id == id).first()
-
-        if user is None: 
-            return {'error': 'user not found'}, 404
-        
-        db.session.delete(user)
-        db.session.commit()
-        return {}, 204
+@app.route('/check_session')
+def check_session():
+    user_id = session.get('user_id')
+    user = User.query.filter(User.id == user_id).first()
+    if not user:
+        return {'error': 'unauth'}, 401
+    return user.to_dict(), 200    
 
