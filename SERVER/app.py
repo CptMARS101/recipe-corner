@@ -110,3 +110,9 @@ def check_session():
     if not user:
         return {'error': 'unauth'}, 401
     return user.to_dict(), 200    
+
+
+if __name__ == '__main__':
+    app.run()
+
+
