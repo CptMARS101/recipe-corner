@@ -11,7 +11,7 @@ function LoginForm() {
             'username': event.target.username.value,
             'password': event.target.password.value
         }
-        fetch('http://localhost:3000/users', {
+        fetch('http://127.0.0.1:5000/users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

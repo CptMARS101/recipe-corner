@@ -18,7 +18,7 @@ function RecipeForm(){
             ingredients: e.target.ingredients.value.split('//'),
             recipe: e.target.recipe.value.split('//')
         }
-        fetch('http://localhost:3000/recipes', {
+        fetch('http://127.0.0.1:5000/recipes', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
