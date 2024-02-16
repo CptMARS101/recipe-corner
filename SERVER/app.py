@@ -40,7 +40,7 @@ def all_recipes(id):
         new_recipe = Recipe(
             name = json_data.get('name'), 
             ingredients = json_data.get('ingredients'),
-
+            steps = json_data.get('steps'),
             image = json_data.get('image'),
             user_id = user_session_id,
             user = user_session
