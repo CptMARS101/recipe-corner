@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
 //NEED TO FETCH to /check_session before loading form
 function RecipeForm(){
@@ -8,6 +9,7 @@ function RecipeForm(){
     const [ingredients, setIngredients] = useState("")
     const [steps, setSteps] = useState("")
     const [foodList, setFoodList] = useState([])
+    const [user] = useOutletContext()
 
     function handleForm(e) {
         e.preventDefault()
@@ -32,10 +34,9 @@ function RecipeForm(){
         .then(data => setFoodList(pV => [...pV, data]))
     }
 /////////CHECKS USER BEFORE LOADING FORM/////////////////
-/*
     if (!user || !user.username) {
         return <p>Log IN to post new recipes!</p>
-    }  */
+    }
 
     return (
         <div>
@@ -66,7 +67,7 @@ function RecipeForm(){
                 <input 
                 type="text" 
                 name="steps" 
-                placeholder="steps" 
+                placeholder="Steps" 
                 className="input-text"
                 value={steps} onChange={e => setSteps(e.target.value)}/>
                 <br />

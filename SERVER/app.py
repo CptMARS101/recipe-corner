@@ -1,7 +1,7 @@
+from flask import Flask, make_response, jsonify, request, session
 from models import db, Recipe, User
 from flask_restful import Api, Resource
 from flask_migrate import Migrate
-from flask import Flask, make_response, jsonify, request, session
 from flask_cors import CORS
 import os
 
@@ -26,7 +26,7 @@ def home():
     return ''
 
 @app.route('/recipes', methods = ['GET', 'POST'])
-def all_recipes(id):
+def all_recipes():
     if request.method == 'GET':
         recipes = Recipe.query.all()
         return [r.to_dict(rules = ['-recipes']) for r in recipes], 200
@@ -40,13 +40,16 @@ def all_recipes(id):
         new_recipe = Recipe(
             name = json_data.get('name'), 
             ingredients = json_data.get('ingredients'),
-            steps = json_data.get('steps'),
+
             image = json_data.get('image'),
             user_id = user_session_id,
             user = user_session
+
+
         )
         db.session.add(new_recipe)
         db.session.commit()
+
         return new_recipe.to_dict(), 201
     
 @app.route('/recipes/<int:id>', methods = ['GET', 'PATCH','DELETE'])
