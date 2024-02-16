@@ -1,19 +1,18 @@
 import React from "react";
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+//import { useOutletContext } from "react-router-dom";
 
 //NEED TO FETCH to /check_session before loading form
-function RecipeForm(){
+function RecipeForm() {
     const [name, setName] = useState("")
     const [image, setImage] = useState("")
     const [ingredients, setIngredients] = useState("")
     const [steps, setSteps] = useState("")
     const [foodList, setFoodList] = useState([])
-    const [user] = useOutletContext()
+    //const [user] = useOutletContext()
 
     function handleForm(e) {
         e.preventDefault()
-
         const newFood = {
             name: e.target.name.value,
             image: e.target.image.value,
@@ -22,7 +21,6 @@ function RecipeForm(){
         }
 
         fetch('http://127.0.0.1:5000/recipes', {
-
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -33,10 +31,10 @@ function RecipeForm(){
         .then(res => res.json())
         .then(data => setFoodList(pV => [...pV, data]))
     }
-/////////CHECKS USER BEFORE LOADING FORM/////////////////
+/*
     if (!user || !user.username) {
         return <p>Log IN to post new recipes!</p>
-    }
+    } */
 
     return (
         <div>

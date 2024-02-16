@@ -2,13 +2,13 @@ import React from "react";
 import Ingredient from "./ingredient";
 import Recipe from "./recipe";
 
-function FeaturedRecipe({featFood, setFoodList, list}){
+function FeaturedRecipe({featFood, setFoodList, list, setFeatFood}){
     function handleDelete() {
-        const updateFood = list.filter(f => f.id != featFood.id)
+        const updateFood = list.filter(f => f.id !== featFood.id)
         setFoodList(updateFood)
+        setFeatFood()
 
-        fetch(`http://127.0.0.1:5000/${featFood.id}`, {
-
+        fetch(`http://127.0.0.1:5000/recipes/${featFood.id}`, {
             method: 'DELETE'
         })
     }
