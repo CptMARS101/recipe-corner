@@ -9,7 +9,6 @@ function FeaturedRecipe({featFood, setFoodList, list, setFeatFood}){
         setFeatFood({})
 
         fetch(`http://127.0.0.1:5000/recipes/${featFood.id}`, {
-
             method: 'DELETE'
         })
     }

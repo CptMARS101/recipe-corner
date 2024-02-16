@@ -8,28 +8,35 @@ function RecipeForm(){
     const [ingredients, setIngredients] = useState("")
     const [steps, setSteps] = useState("")
     const [foodList, setFoodList] = useState([])
+    const [error, setError] = useState(null)
 
     function handleForm(e) {
         e.preventDefault()
-
         const newFood = {
             name: e.target.name.value,
-            image: e.target.image.value,
             ingredients: e.target.ingredients.value.split('//'),
-            steps: e.target.steps.value.split('//')
-        }
+            steps: e.target.steps.value.split('//'),
+            image: e.target.image.value
+        };
 
         fetch('http://127.0.0.1:5000/recipes', {
-
             method: 'POST',
             headers: {
-                'Content-type': 'application/json',
-                'Accept': 'application/json'
+                'Content-type': 'application/json'
             },
             body: JSON.stringify(newFood)
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Failed to add recipe');
+            }
+            return res.json();
+        })
         .then(data => setFoodList(pV => [...pV, data]))
+        .catch(error => {
+            setError(error.message);
+            console.error('Error adding recipe', error);
+        });
     }
 /////////CHECKS USER BEFORE LOADING FORM/////////////////
 /*

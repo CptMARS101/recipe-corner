@@ -1,8 +1,8 @@
 from models import db, Recipe, User
 from flask_restful import Api, Resource
 from flask_migrate import Migrate
-from flask import Flask, make_response, jsonify, request, session
-from flask_cors import CORS
+from flask import Flask, request, session
+#from flask_cors import CORS
 import os
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -19,24 +19,22 @@ app.secret_key = os.environ.get('SECRET_KEY')
 db.init_app(app)
 
 migrate = Migrate(app, db)
-CORS(app, supports_credentials=True)
+#CORS(app, supports_credentials=True)
 
 @app.route('/')
 def home():
     return ''
 
 @app.route('/recipes', methods = ['GET', 'POST'])
-def all_recipes(id):
+def all_recipes():
+    user_session_id = session.get('user_id')
+    user_session = User.query.filter(User.id == user_session_id).first()
     if request.method == 'GET':
         recipes = Recipe.query.all()
-        return [r.to_dict(rules = ['-recipes']) for r in recipes], 200
+        return [r.to_dict() for r in recipes], 200
 
     elif request.method == 'POST':
         json_data = request.get_json()
-        ######Getting signed in user
-        user_session_id = session.get('user_id')
-        user_session = User.query.filter(User.id == user_session_id).first()
-
         new_recipe = Recipe(
             name = json_data.get('name'), 
             ingredients = json_data.get('ingredients'),
@@ -47,6 +45,7 @@ def all_recipes(id):
         )
         db.session.add(new_recipe)
         db.session.commit()
+        print(new_recipe.to_dict())
         return new_recipe.to_dict(), 201
     
 @app.route('/recipes/<int:id>', methods = ['GET', 'PATCH','DELETE'])
@@ -58,19 +57,16 @@ def recipe_by_id(id):
     
     if request.method == 'GET':
         return recipe.to_dict(),200
+    
     elif request.method == 'PATCH':
         json_data = request.get_json()
         for field in json_data:
             setattr(recipe, field, json_data[field])
         db.session.add(recipe)
         db.session.commit()
-
         return recipe.to_dict(),200
     
     elif request.method == 'DELETE':
-        
-        if recipe is None: 
-            return {'error': 'recipe not found'}, 404
         db.session.delete(recipe)
         db.session.commit()
         return {}, 204
