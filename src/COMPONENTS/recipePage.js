@@ -19,7 +19,7 @@ function RecipePage() {
         <div>
             <RecipeSearch setSearch={setSearch}/>
             <RecipeMenu list={searchRecipe} setFeatFood={setFeatFood}/>
-            <FeaturedRecipe featFood={featFood} setFoodList={setFoodList} list={foodList}/>
+            <FeaturedRecipe featFood={featFood} setFoodList={setFoodList} list={foodList} setFeatFood={setFeatFood}/>
         </div>
     )
 }

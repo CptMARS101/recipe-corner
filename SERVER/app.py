@@ -26,7 +26,7 @@ def home():
     return ''
 
 @app.route('/recipes', methods = ['GET', 'POST'])
-def all_recipes():
+def all_recipes(id):
     if request.method == 'GET':
         recipes = Recipe.query.all()
         return [r.to_dict(rules = ['-recipes']) for r in recipes], 200
@@ -44,12 +44,9 @@ def all_recipes():
             image = json_data.get('image'),
             user_id = user_session_id,
             user = user_session
-
-
         )
         db.session.add(new_recipe)
         db.session.commit()
-
         return new_recipe.to_dict(), 201
     
 @app.route('/recipes/<int:id>', methods = ['GET', 'PATCH','DELETE'])

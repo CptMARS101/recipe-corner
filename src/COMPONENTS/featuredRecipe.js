@@ -2,12 +2,13 @@ import React from "react";
 import Ingredient from "./ingredient";
 import Recipe from "./recipe";
 
-function FeaturedRecipe({featFood, setFoodList, list}){
+function FeaturedRecipe({featFood, setFoodList, list, setFeatFood}){
     function handleDelete() {
         const updateFood = list.filter(f => f.id != featFood.id)
         setFoodList(updateFood)
+        setFeatFood({})
 
-        fetch(`http://127.0.0.1:5000/${featFood.id}`, {
+        fetch(`http://127.0.0.1:5000/recipes/${featFood.id}`, {
 
             method: 'DELETE'
         })
@@ -22,7 +23,7 @@ function FeaturedRecipe({featFood, setFoodList, list}){
             {featFood.ingredients && featFood.ingredients.map((i, index) => <Ingredient key={index} ingredient={i} />)}
             <br />
             <h4>Recipe</h4>
-            {featFood.recipe && featFood.recipe.map((r, index) => <Recipe key={index} recipe={r}/>)}
+            {featFood.steps && featFood.steps.map((r, index) => <Recipe key={index} recipe={r}/>)}
             <br />
             <button className="delete" onClick={handleDelete}>REMOVE</button>
             </div>   
