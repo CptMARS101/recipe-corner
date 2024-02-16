@@ -11,7 +11,7 @@ function RecipeSearch({setSearch}){
             <input classname = "search_input"
                 type="text"
                 name="search-in"
-                placeholder="Recipe Name"
+                placeholder="Search Cookbook"
                 onChange={handleSearch} />
         </div>
     )
