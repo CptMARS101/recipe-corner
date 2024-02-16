@@ -11,11 +11,11 @@ function Signup() {
         e.preventDefault()
         const data = {
             'username': e.target.username.value,
-            'password': e.target.password.value
+            'password': e.target.password.value,
+            'password2': e.target.password2.value
         }
-        const pwTwo = {'password2': e.target.password2.value}
 
-        if (data.password === pwTwo.password2) {
+        if (data.password === data.password2) {
             setUsername(data.username)
             setPassword(data.password)
             fetch('http://127.0.0.1:5000/signup', {
@@ -28,25 +28,16 @@ function Signup() {
         .then(res => {
             if (res.ok) {
                 setMsg('Signed Up!')
-                return res.json()
             } else {
                 setMsg('Something went Wrong!')
-                return res.text().then(errorMessage => {
-                    throw new Error(errorMessage);
-                });
+                return Promise.reject(res)
             }
         })
-        .catch(error => {
-            console.error(error);
-            setError(error.message);
-        })
-        .then(data => {
-            setError(data);
-            console.log(data);
-        })
+        .catch(res => res.json())
+        .then(data => setError(data))
         } else {
             setMsg('passwords do not match :(')
-            }
+        }
         
     }
     const errorElement = error ? <p style={{color: 'red'}}>{error.error}</p> : null

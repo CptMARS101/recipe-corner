@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
 //NEED TO FETCH to /check_session before loading form
 function RecipeForm(){
@@ -8,41 +9,34 @@ function RecipeForm(){
     const [ingredients, setIngredients] = useState("")
     const [steps, setSteps] = useState("")
     const [foodList, setFoodList] = useState([])
-    const [error, setError] = useState(null)
+    const [user] = useOutletContext()
 
     function handleForm(e) {
         e.preventDefault()
+
         const newFood = {
             name: e.target.name.value,
+            image: e.target.image.value,
             ingredients: e.target.ingredients.value.split('//'),
-            steps: e.target.steps.value.split('//'),
-            image: e.target.image.value
-        };
+            steps: e.target.steps.value.split('//')
+        }
 
         fetch('http://127.0.0.1:5000/recipes', {
+
             method: 'POST',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify(newFood)
         })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error('Failed to add recipe');
-            }
-            return res.json();
-        })
+        .then(res => res.json())
         .then(data => setFoodList(pV => [...pV, data]))
-        .catch(error => {
-            setError(error.message);
-            console.error('Error adding recipe', error);
-        });
     }
 /////////CHECKS USER BEFORE LOADING FORM/////////////////
-/*
     if (!user || !user.username) {
         return <p>Log IN to post new recipes!</p>
-    }  */
+    }
 
     return (
         <div>
@@ -73,7 +67,7 @@ function RecipeForm(){
                 <input 
                 type="text" 
                 name="steps" 
-                placeholder="steps" 
+                placeholder="Steps" 
                 className="input-text"
                 value={steps} onChange={e => setSteps(e.target.value)}/>
                 <br />

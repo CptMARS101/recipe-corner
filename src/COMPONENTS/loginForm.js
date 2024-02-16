@@ -12,12 +12,14 @@ function LoginForm() {
             'username': e.target.username.value,
             'password': e.target.password.value
         }
+
         fetch('http://127.0.0.1:5000/login', {
+
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
-            credentials: 'include',
             body: JSON.stringify(data)
         })
         .then(res => {
@@ -46,7 +48,6 @@ function LoginForm() {
                 <br />
                 <input type="submit" />
             </form>
-            <br />
             <NavLink to='/signup' className='nav-link'>Signup Today!</NavLink>
         </div>
     )

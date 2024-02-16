@@ -73,7 +73,7 @@ if __name__ == '__main__':
         "step6: Bake for 17-19 minutes, just until the center of the tart no longer jiggles when you give the pan a light tap. It will still be a little sticky on top. Avoid over-baking because the tart will taste rubbery. (Tip: Err on the side of under-baking because the filling also has a chance to set up in the refrigerator. You want a creamy soft filling.)",
         "step7: Remove tart from the oven and place on a cooling rack. Cool completely at room temperature, then chill in the refrigerator uncovered for at least 2 hours and up to 1 day. If chilling for longer than 2 hours, cover it. After chilling, remove the sides of the tart pan if your pan has removable sides.",
         "step8: Slice and serve with optional garnishes including any leftover blueberry sauce."]),
-            Recipe(name="Beans and Rice", image="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2007/12/7/1/IE0213_Red_Beans_and_Rice.jpg.rend.hgtvcom.616.462.suffix/1552488799980.jpeg", ingredients=["beans",
+            Recipe(name="Beans anad Rice", image="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2007/12/7/1/IE0213_Red_Beans_and_Rice.jpg.rend.hgtvcom.616.462.suffix/1552488799980.jpeg", ingredients=["beans",
         "rice",
         "celery"], steps=[ "prep",
         "cook",
@@ -101,7 +101,7 @@ if __name__ == '__main__':
             user.recipes.append(
                 recipe
             )
-        db.session.add(recipe)
+        db.session.add_all(recipes)
         db.session.commit()
 #####################################
         print("Done seeding!")

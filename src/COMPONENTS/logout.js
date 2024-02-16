@@ -6,9 +6,10 @@ function Logout(){
     const [loggedOut, setLoggedOut] = useState()
 
     useEffect(() => {
+
         fetch('http://127.0.0.1:5000/logout', {
-            method: 'DELETE',
-            credentials: 'include'
+
+            method: 'DELETE'
         })
         .then(res => {
             if(res.ok) {

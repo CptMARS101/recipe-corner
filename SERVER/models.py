@@ -42,7 +42,6 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String)
     recipes = db.relationship('Recipe', back_populates='user')
 
-    serialize_rules=['-recipes.user', '-_password_hash']
     @hybrid_property
     def password_hash(self):
         return self._password_hash
@@ -54,6 +53,12 @@ class User(db.Model, SerializerMixin):
 
     def authenticate(self, password):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+
+    serialize_rules=['-recipes.user', '-_password_hash']
+    @validates('password_hash')
+    def val_pword(self, key, new_pw):
+        if len(new_pw) < 7:
+            raise ValueError('Password must be more than 7 characters')
 
     def __repr__(self):
         return f'<User {self.id} {self.username}>'
