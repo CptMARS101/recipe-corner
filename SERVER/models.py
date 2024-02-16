@@ -55,10 +55,6 @@ class User(db.Model, SerializerMixin):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
 
     serialize_rules=['-recipes.user', '-_password_hash']
-    @validates('password_hash')
-    def val_pword(self, key, new_pw):
-        if len(new_pw) < 7:
-            raise ValueError('Password must be more than 7 characters')
-
+    
     def __repr__(self):
         return f'<User {self.id} {self.username}>'
